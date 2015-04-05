@@ -7,26 +7,36 @@ import java.util.List;
 import java.util.Random;
 
 import asktechforum.dominio.Usuario;
-import asktechforum.repositorio.UsuarioDAO;
+import asktechforum.repositorio.RepositorioUsuario;
 import asktechforum.util.UsuarioUtil;
 import asktechforum.dominio.Pergunta;
 import asktechforum.dominio.Resposta;
 import asktechforum.negocio.CadastroPerguntaBC;
 import asktechforum.negocio.CadastroRespostaBC;
 
+/**
+ * Classe que lida com as regras de negocio para cadastro de Usuario
+ */
 public class UsuarioBC {
 
-	private UsuarioDAO usuarioDAO;
+	private RepositorioUsuario usuarioDAO;
 	private CadastroPerguntaBC perguntaBC;
 	private CadastroRespostaBC respostaBC;
 	
+	/**
+	 * Construtor
+	 */
 	public UsuarioBC() {
         super();
-        this.usuarioDAO = new UsuarioDAO();
+        this.usuarioDAO = new RepositorioUsuario();
         this.perguntaBC = new CadastroPerguntaBC();
         this.respostaBC = new CadastroRespostaBC();
 	}
 	
+	/**
+	 * Metodo responsavel por alterar um usuario
+	 * @param Usuario a ser alterado
+	 */
 	public boolean alterarUsuario(Usuario usuario){
 		boolean flag = validarUsuario(usuario);
 		
@@ -40,7 +50,11 @@ public class UsuarioBC {
 		
 		return flag;
 	}
-
+	
+	/**
+	 * Metodo responsavel por atribuir ou remover a funcao de admin de um usuario
+	 * @param Usuario a ser alterado
+	 */
 	public boolean alterarUsuarioAdmin(Usuario usuario){
 		boolean flag = validarUsuario(usuario);
 		
@@ -54,13 +68,17 @@ public class UsuarioBC {
 		
 		return flag;
 	}
-
-	public boolean adicionarUsuario(Usuario usuario){
+	
+	/**
+	 * Metodo responsavel por inserir um usuario na base de dados
+	 * @param Usuario a ser inserido
+	 */
+	public boolean inserirUsuario(Usuario usuario){
 		boolean flag = validarUsuario(usuario);
 		
 		if(flag) {
 			try {
-				this.usuarioDAO.adicionarUsuario(usuario);
+				this.usuarioDAO.inserirUsuario(usuario);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -68,7 +86,10 @@ public class UsuarioBC {
 		
 		return flag;
 	}
-	
+	/**
+	 * Metodo responsavel por deletar um usuario na base de dados atraves de um id
+	 * @param idUsuario - Id do usuario a ser deletado
+	 */
 	public void deletarUsuarioPorId(int idUsuario) {
 		try {
 			this.usuarioDAO.deletarUsuarioPorId(idUsuario);
@@ -77,7 +98,11 @@ public class UsuarioBC {
 		}
 	}
 
-	public void deletarUsuario(String email) {
+	/**
+	 * Metodo responsavel por deletar um usuario na base de dados atraves do email
+	 * @param email- Email do usuario a ser deletado
+	 */
+	public void deletarUsuarioPorEmail(String email) {
 		Usuario usuario = new Usuario();
 		try {
 			usuario = this.usuarioDAO.consultarUsuarioPorEmail(email);
@@ -112,16 +137,16 @@ public class UsuarioBC {
 					usuarioExcluido.setLocalizacao("");
 					usuarioExcluido.setSenha(numeroRandomico+"");
 					usuarioExcluido.setConfSenha(numeroRandomico+"");
-					this.adicionarUsuario(usuarioExcluido);
+					this.inserirUsuario(usuarioExcluido);
 					idUsuarioExcluido = this.usuarioDAO.consultarUsuarioPorEmail("usuarioExcluido@" + numeroRandomico + ".com").getIdUsuario();
 					usuarioExcluido.setIdUsuario(usuario.getIdUsuario());
 					this.alterarUsuario(usuarioExcluido);
 					this.deletarUsuarioPorId(idUsuarioExcluido);
 				}else {
-					this.usuarioDAO.deletarUsuario(email);
+					this.usuarioDAO.deletarUsuarioPorEmail(email);
 				}
 			}else {
-				this.usuarioDAO.deletarUsuario(email);
+				this.usuarioDAO.deletarUsuarioPorEmail(email);
 			}
 			
 		} catch (SQLException e) {
@@ -129,6 +154,12 @@ public class UsuarioBC {
 		}
 	}
 
+	/**
+	 * Metodo responsavel por consultar um usuario atraves do email e senha
+	 * @param email - Email do usuario a ser consultado
+	 * @param senha - Senha do usuario a ser consultado
+	 * @return Usuario - usuario encontrado
+	 */
 	public Usuario consultarUsuarioPorEmail_Senha(String email, String senha) {
 		Usuario usuario = null;
 		try {
@@ -141,6 +172,11 @@ public class UsuarioBC {
 		return usuario;
 	}
 
+	/**
+	 * Metodo responsavel por consultar um usuario atraves do id
+	 * @param Id - Id do usuario a ser consultado
+	 * @return Usuario - usuario encontrado
+	 */
 	public Usuario consultarUsuarioPorId(int idUsuario) {
 		Usuario usuario = new Usuario();
 		try {
@@ -150,7 +186,12 @@ public class UsuarioBC {
 		}
 		return usuario;
 	}
-
+	
+	/**
+	 * Metodo responsavel por consultar um usuario atraves do email
+	 * @param email - Email do usuario a ser consultado
+	 * @return Usuario - usuario encontrado
+	 */
 	public Usuario consultarUsuarioPorEmail(String email) {
 		Usuario usuario = new Usuario();
 		try {
@@ -160,7 +201,12 @@ public class UsuarioBC {
 		}
 		return usuario;
 	}
-
+	
+	/**
+	 * Metodo responsavel por consultar um usuario atraves do nome
+	 * @param nome - Email do usuario a ser consultado
+	 * @return Lista de usuario encontrados
+	 */
 	public List<Usuario> consultarUsuarioPorNome(String nome) {
 		List<Usuario> usuarios = new ArrayList<Usuario>();
 		try {
@@ -171,6 +217,10 @@ public class UsuarioBC {
 		return usuarios;
 	}
 	
+	/**
+	 * Metodo responsavel por consultar todos os usuarios
+	 * @return Lista de usuario encontrados
+	 */
 	public List<Usuario> consultarTodosUsuarios() {
         List<Usuario> usuarios = new ArrayList<Usuario>();
         try {
@@ -181,7 +231,13 @@ public class UsuarioBC {
         return usuarios;
 	}
 	
-	public boolean validarUsuario(Usuario usuario) {
+	/**
+	 * Metodo responsavel por validadar os dados de um usuario
+	 * @param usuario - Usuario a ser validado
+	 * @return status de validacao - verdadeiro se validado
+	 * 							   - falso se não validado
+	 */
+	private boolean validarUsuario(Usuario usuario) {
 		boolean flag = true;
 		Date data = null;
 		
@@ -264,25 +320,12 @@ public class UsuarioBC {
 		
 		return flag;
 	}
-	
-	public boolean validarEmail(String email) {
-		boolean flag = true;
 		
-		return flag;
-	}
-	
-	public boolean validarIdUsuario(int idUsuario) {
-		boolean flag = true;
-		
-		return flag;
-	}
-	
-	public boolean validarNome(String nome) {
-		boolean flag = true;
-		
-		return flag;
-	}
-	
+	/**
+	 * Metodo responsavel por consultar quantos usuarios admin estao cadastrados
+	 * @param usuario -  Usuario logado 
+	 * @return - quantidade de usuarios admin
+	 */
 	public int consultarQuantidadeAdmin(Usuario usuario) {
 		int quantAdmin = 0;
 		Boolean flag = false;
@@ -310,6 +353,13 @@ public class UsuarioBC {
 		return quantAdmin;
 	}
 	
+	/**
+	 * Metodo responsavel por verificar email de um usuario
+	 * @param email - email a ser verificado
+	 * @param usuario - usuario a ser verificado
+	 * @return verdadeiro - se o email pertencer ao usuario
+	 *         falso - se o email nao pertencer ao usuario
+	 */
 	public boolean verificarEmail(String email, Usuario usuario) {
 		boolean flag = false;
 		List<Usuario> listaUsuarios = new ArrayList<Usuario>();
@@ -334,6 +384,11 @@ public class UsuarioBC {
 		return flag;
 	}
 	
+	/**
+	 * Metodo responsavel por formatar uma data
+	 * @param dataString - data a ser formatada
+	 * @return data formatada
+	 */
 	public String formatarDataSQL(String dataString) {
 		String arrayDataString[] = dataString.split("-");
 		dataString = "";

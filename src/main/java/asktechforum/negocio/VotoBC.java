@@ -2,35 +2,56 @@ package asktechforum.negocio;
 
 import java.sql.SQLException;
 
-import asktechforum.repositorio.VotoDAO;
+import asktechforum.repositorio.RepositorioVoto;
 
+/**
+ * Classe que lida com as regras de negocio para cadastro de Voto
+ */
 public class VotoBC {
-	private VotoDAO votoDAO;
+	private RepositorioVoto votoDAO;
 	
+	/**
+	 * Construtor
+	 */
 	public VotoBC() {
-		this.votoDAO = new VotoDAO();
+		this.votoDAO = new RepositorioVoto();
 	}
 	
-	public void adicionarVotoUsuario(int idUsuario, int idResposta) {
+	/**
+	 * Metodo responsavel por inserir um voto
+	 * @param idUsuario- Id do usuario autor do voto
+	 * @param idResposta- Id da resposta que recebera o voto
+	 */
+	public void inserirVoto(int idUsuario, int idResposta) {
 		try {
-			this.votoDAO.adicionarVotoUsuario(idUsuario, idResposta);
+			this.votoDAO.inserirVoto(idUsuario, idResposta);
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void deletarUsuarioVoto(int idUsuario, int idResposta) {
+	/**
+	 * Metodo responsavel por deletar um voto
+	 * @param idUsuario- Id do usuario autor do voto
+	 * @param idResposta- Id da resposta que recebeu o voto
+	 */
+	public void deletarVoto(int idUsuario, int idResposta) {
 		try {
-			this.votoDAO.deletarUsuarioVoto(idUsuario, idResposta);
+			this.votoDAO.deletarVoto(idUsuario, idResposta);
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public Boolean consultarUsuarioVoto(int idUsuario, int idResposta) {
+	/**
+	 * Metodo responsavel por consultar voto
+	 * @param idUsuario- Id do usuario autor do voto
+	 * @param idResposta- Id da resposta que recebeu o voto
+	 */
+	public Boolean consultarVoto(int idUsuario, int idResposta) {
 		Boolean flag = true;
 		try {
-			flag = this.votoDAO.consultarUsuarioVoto(idUsuario, idResposta);
+			flag = this.votoDAO.consultarVoto(idUsuario, idResposta);
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}

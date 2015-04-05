@@ -2,6 +2,9 @@ package asktechforum.dominio;
 
 import java.sql.Date;
 
+/**
+ * Classe que representa um Usuario
+ */
 public class Usuario {
 	private int idUsuario;
 	private String nome;

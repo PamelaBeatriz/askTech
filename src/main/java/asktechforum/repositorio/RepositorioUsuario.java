@@ -12,14 +12,25 @@ import asktechforum.util.ConnectionUtil;
 import asktechforum.util.UsuarioUtil;
 import asktechforum.dominio.Usuario;
 
-public class UsuarioDAO {
+/**
+ * Repositorio de dados para o objeto Usuario
+ */
+public class RepositorioUsuario {
 	private Connection connection = null;
     UsuarioUtil usuarioUtil;
 	
-	public UsuarioDAO(){
+    /**
+	 * Construtor vazio
+	 */
+	public RepositorioUsuario(){
 		this.usuarioUtil = new UsuarioUtil();
 	}
 	
+	/**
+	 * Metodo responsavel por alterar um usuario
+	 * @param Usuario a ser alterado
+	 * @throws SQLException - Excecao caso ocorra na insercao
+	 */
 	public void alterarUsuario(Usuario usuario) throws SQLException {
 		PreparedStatement preparedStatement = null;
 		try {
@@ -44,7 +55,11 @@ public class UsuarioDAO {
             this.connection.close();
         }
     }
-	
+	/**
+	 * Metodo responsavel por atribuir ou remover a funcao de admin de um usuario
+	 * @param Usuario a ser alterado
+	 * @throws SQLException - Excecao caso ocorra na insercao
+	 */
 	public void alterarUsuarioAdmin(Usuario usuario) throws SQLException {
 		PreparedStatement preparedStatement = null;
 		try {
@@ -65,7 +80,12 @@ public class UsuarioDAO {
         }
     }
 	
-	public void adicionarUsuario(Usuario usuario) throws SQLException {
+	/**
+	 * Metodo responsavel por inserir um usuario na base de dados
+	 * @param Usuario a ser inserido
+	 * @throws SQLException - Excecao caso ocorra na insercao
+	 */
+	public void inserirUsuario(Usuario usuario) throws SQLException {
 		PreparedStatement preparedStatement = null;
 		try {
 			this.connection = ConnectionUtil.getConnection();
@@ -89,7 +109,12 @@ public class UsuarioDAO {
         }
     }
 	
-	public void deletarUsuario(String email) throws SQLException {
+	/**
+	 * Metodo responsavel por deletar um usuario na base de dados atraves do email
+	 * @param email- Email do usuario a ser deletado
+	 * @throws SQLException - Excecao caso ocorra na delecao
+	 */
+	public void deletarUsuarioPorEmail(String email) throws SQLException {
 		PreparedStatement preparedStatement = null;
         try {
     		this.connection = ConnectionUtil.getConnection();
@@ -107,6 +132,11 @@ public class UsuarioDAO {
         }
     }
 	
+	/**
+	 * Metodo responsavel por deletar um usuario na base de dados atraves de um id
+	 * @param idUsuario - Id do usuario a ser deletado
+	 * @throws SQLException - Excecao caso ocorra na delecao
+	 */
 	public void deletarUsuarioPorId(int idUsuario) throws SQLException {
 		PreparedStatement preparedStatement = null;
         try {
@@ -125,6 +155,13 @@ public class UsuarioDAO {
         }
     }
 	
+	/**
+	 * Metodo responsavel por consultar um usuario atraves do email e senha
+	 * @param email - Email do usuario a ser consultado
+	 * @param senha - Senha do usuario a ser consultado
+	 * @return Usuario - usuario encontrado
+	 * @throws SQLException - Excecao caso ocorra na consulta
+	 */
 	public Usuario consultarUsuarioPorEmail_Senha(String email,String senha) 
 			throws SQLException {
 		PreparedStatement preparedStatement = null;
@@ -160,6 +197,12 @@ public class UsuarioDAO {
 		return usuario;
 	}
 	
+	/**
+	 * Metodo responsavel por consultar um usuario atraves do id
+	 * @param Id - Id do usuario a ser consultado
+	 * @return Usuario - usuario encontrado
+	 * @throws SQLException - Excecao caso ocorra na consulta
+	 */
 	public Usuario consultarUsuarioPorId(int idUsuario) throws SQLException {
 		PreparedStatement preparedStatement = null;
 		ResultSet rs = null;
@@ -192,7 +235,13 @@ public class UsuarioDAO {
 		
 		return usuario;
 	}
-		
+	
+	/**
+	 * Metodo responsavel por consultar um usuario atraves do email
+	 * @param email - Email do usuario a ser consultado
+	 * @return Usuario - usuario encontrado
+	 * @throws SQLException - Excecao caso ocorra na consulta
+	 */
 	public Usuario consultarUsuarioPorEmail(String email) throws SQLException {
 		PreparedStatement preparedStatement = null;
 		ResultSet rs = null;
@@ -226,6 +275,12 @@ public class UsuarioDAO {
 		return usuario;
 	}	
 	
+	/**
+	 * Metodo responsavel por consultar um usuario atraves do nome
+	 * @param nome - Email do usuario a ser consultado
+	 * @return Lista de usuario encontrados
+	 * @throws SQLException - Excecao caso ocorra na consulta
+	 */
 	public List<Usuario> consultarUsuarioPorNome(String nome) throws SQLException {
 		PreparedStatement preparedStatement = null;
 		ResultSet rs = null;
@@ -261,6 +316,11 @@ public class UsuarioDAO {
 		return usuarios;
 	}	
 	
+	/**
+	 * Metodo responsavel por consultar todos os usuarios
+	 * @return Lista de usuario encontrados
+	 * @throws SQLException - Excecao caso ocorra na consulta
+	 */
 	public List<Usuario> consultarTodosUsuarios() throws SQLException {
 		Statement statement = null;
 		ResultSet rs = null;

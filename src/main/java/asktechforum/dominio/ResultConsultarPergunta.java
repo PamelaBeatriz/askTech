@@ -1,5 +1,8 @@
 package asktechforum.dominio;
 
+/**
+ * Classe que representa um Result de consultar Pergunta
+ */
 public class ResultConsultarPergunta extends Pergunta {
 	
 	private String autor;

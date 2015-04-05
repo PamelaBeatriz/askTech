@@ -64,7 +64,7 @@ public class ServletCadastroResposta extends HttpServlet {
 			if(liked) {
 				
 				cadastro.adicionarVotoResposta(Integer.parseInt(idResposta));
-				this.votoBC.adicionarVotoUsuario(Integer.parseInt(idUsuario), Integer.parseInt(idResposta));
+				this.votoBC.inserirVoto(Integer.parseInt(idUsuario), Integer.parseInt(idResposta));
 				
 				this.cadastro = new CadastroRespostaBC();
 	
@@ -77,7 +77,7 @@ public class ServletCadastroResposta extends HttpServlet {
 			}else {
 				
 				cadastro.removerVotoResposta(Integer.parseInt(idResposta));
-				this.votoBC.deletarUsuarioVoto(Integer.parseInt(idUsuario), Integer.parseInt(idResposta));
+				this.votoBC.deletarVoto(Integer.parseInt(idUsuario), Integer.parseInt(idResposta));
 				
 				this.cadastro = new CadastroRespostaBC();
 	
@@ -111,7 +111,7 @@ public class ServletCadastroResposta extends HttpServlet {
 			resposta.setIdUsuario(usuario.getIdUsuario());			
 
 			String retornoCadastroResposta = cadastro
-					.adicionarResposta(resposta);
+					.inserirResposta(resposta);
 
 			if (retornoCadastroResposta != null
 					&& !retornoCadastroResposta.equals("cadastroSucesso")) {

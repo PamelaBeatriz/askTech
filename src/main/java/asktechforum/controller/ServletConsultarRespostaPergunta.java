@@ -52,7 +52,7 @@ public class ServletConsultarRespostaPergunta extends HttpServlet {
 		RequestDispatcher view = null;
 		
 		if(request.getParameter("alterarResposta")!= null){
-			Resposta resposta = this.cadastroRespostaBC.consultarRespostaPorIdResposta(
+			Resposta resposta = this.cadastroRespostaBC.consultarRespostaPorId(
 					Integer.parseInt(request.getParameter("idRespostaSelecionada")));
 			session.setAttribute("resposta", resposta);
 			view = request.getRequestDispatcher(ALTERACAO_RESPOSTA);
@@ -91,7 +91,7 @@ public class ServletConsultarRespostaPergunta extends HttpServlet {
 		RequestDispatcher view = null;
 		
 		if(request.getParameter("alterarResposta")!= null){
-			Resposta resposta = this.cadastroRespostaBC.consultarRespostaPorIdResposta(
+			Resposta resposta = this.cadastroRespostaBC.consultarRespostaPorId(
 					Integer.parseInt(request.getParameter("idRespostaSelecionada")));
 		    session.setAttribute("resposta", resposta);
 			view = request.getRequestDispatcher(ALTERACAO_RESPOSTA);
@@ -103,7 +103,7 @@ public class ServletConsultarRespostaPergunta extends HttpServlet {
 			view.forward(request, response);
 		}else if(request.getParameter("alterarPergunta")!=null){
 			String idPergunta = (String)session.getAttribute("idPergunta");
-			Pergunta pergunta = this.cadastroPerguntaBC.consultarPerguntaPorIdPergunta(
+			Pergunta pergunta = this.cadastroPerguntaBC.consultarPerguntaPorId(
 					Integer.parseInt(idPergunta));
 			session.setAttribute("pergunta", pergunta);
 			request.setAttribute("pergunta", pergunta);

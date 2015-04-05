@@ -22,11 +22,20 @@ import javax.servlet.http.HttpSession;
 
 import asktechforum.dominio.Usuario;
 
+/**
+ * Classe responsavel por fazer o controle de acesso das paginas do sistema
+ */
 public class ControleAcesso implements Filter {
 
 	public void init(FilterConfig config) throws ServletException {
 	}
-
+	
+	/**
+	 * Metodo responsavel por redirecionar o acesso as paginas do sistema
+	 * de acordo com a existencia de um usuario em uma sessao.
+	 * Caso haja usuario na sessao entao o acesso as paginas sera permitido. 
+	 * Caso contrario o acesso sera negado.
+	 */
 	public void doFilter(ServletRequest req, ServletResponse res,
 			FilterChain chain) throws IOException, ServletException {
 

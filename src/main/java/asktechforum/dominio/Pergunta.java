@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 import asktechforum.util.Util;
 
+/**
+ * Classe que representa uma Pergunta 
+ */
 public class Pergunta {
 	private int idPergunta;
 	private String titulo;

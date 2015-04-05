@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import asktechforum.dominio.Pergunta;
 import asktechforum.dominio.ResultConsultarPergunta;
 
-public interface CadastroPergunta {
+public interface RepositorioPergunta {
 	
-	public String adcionarPergunta(Pergunta pergunta) throws SQLException;
+	public String inserirPergunta(Pergunta pergunta) throws SQLException;
 	public void deletarPergunta(int id) throws SQLException;
-	public Pergunta consultarPerguntaPorIdPergunta(int id) throws SQLException;
+	public Pergunta consultarPerguntaPorId(int id) throws SQLException;
 	public ArrayList<Pergunta> consultarPerguntaIdUsuario(int id)
 			throws SQLException;
 	public ArrayList<Pergunta> consultarTodasPerguntas() throws SQLException;

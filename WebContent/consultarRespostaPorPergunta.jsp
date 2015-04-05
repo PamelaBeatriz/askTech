@@ -61,13 +61,13 @@
 							<span style="float: right; font-weight:bold;">
 							   	<%
 							   		VotoBC votoBC = new VotoBC();
-							   	    
-						   	 		if(usuarioLogado != null) {
-						   				Boolean liked = votoBC.consultarUsuarioVoto(usuarioLogado.getIdUsuario(), idResposta);
-						   				
-					          			if(liked == false) {
-						          			liked = true;
-					       		%>
+							   						   	    
+							   					   	 		if(usuarioLogado != null) {
+							   					   				Boolean liked = votoBC.consultarVoto(usuarioLogado.getIdUsuario(), idResposta);
+							   					   				
+							   				          			if(liked == false) {
+							   					          			liked = true;
+							   	%>
 											<a href="<%=getServletContext().getContextPath()%>/ServletCadastroResposta?idR=${resposta.idResposta}&idUser=<%=usuarioLogado.getIdUsuario()%>&liked=<%=liked%>">
 											<img style="width:40px;" src="images/dislike.gif"></a>
 								<%

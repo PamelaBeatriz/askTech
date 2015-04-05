@@ -6,27 +6,36 @@ import java.util.ArrayList;
 import asktechforum.dominio.Email;
 import asktechforum.dominio.Resposta;
 import asktechforum.dominio.Usuario;
-import asktechforum.interfaces.CadastroResposta;
-import asktechforum.repositorio.CadastroRespostaDAO;
+import asktechforum.interfaces.RepositorioResposta;
+import asktechforum.repositorio.RepositorioRespostaBDR;
 
+/**
+ * Classe que lida com as regras de negocio para cadastro de Resposta
+ */
+public class CadastroRespostaBC implements RepositorioResposta {
 
-public class CadastroRespostaBC implements CadastroResposta {
-
-	private CadastroRespostaDAO cadastro;
+	private RepositorioRespostaBDR cadastro;
 	private ArrayList<Resposta> lstResposta;
 
-
+	/**
+	 * Construtor
+	 */
 	public CadastroRespostaBC() {
-		cadastro = new CadastroRespostaDAO();
+		cadastro = new RepositorioRespostaBDR();
 	}
-
+	
+	/**
+	 * Metodo responsavel por inserir uma resposta
+	 * @param Resposta a ser inserida
+	 * @return String com status da acao
+	 */
 	@Override
-	public String adicionarResposta(Resposta resposta) {
+	public String inserirResposta(Resposta resposta) {
 		String msg = "";
 		try {
 			String msgErro = this.verificaCampos(resposta);
 			 if(msgErro.equals("")){
-				msg = cadastro.adicionarResposta(resposta);
+				msg = cadastro.inserirResposta(resposta);
 			}else{
 				msg =  msgErro;
 			}
@@ -36,12 +45,13 @@ public class CadastroRespostaBC implements CadastroResposta {
 		return msg;
 	}
 
-	/** Método que envia email para todos os usuários que responderam uma pergunta e para o autor dessa pergunta.
-	 * Isso acontece quando uma nova resposta é cadastrada.
+	/** Metodo responsavel por enviar email para todos os usuarios que responderam 
+	 * uma pergunta e para o autor dessa pergunta.
+	 * Isso acontece quando uma nova resposta e cadastrada.
+	 * Obs.: O ultimo usuario que respondeu a pergunta nao recebera esse email. 
 	 * 
-	 * 
-	 * idUsuario é o id do usuário que acabou de responder. Fazer com isso o controle de não enviar ao última pessoa q respondeu a pergunta.
-	 * @param idPergunta
+	 * @param idPergunta - Id da pergunta que recebeu a resposta
+	 * @param idUsuario - Id do ultimo usuario que respondeu
 	 */
 	public void notificarContribuintesPerg(int idPergunta, int idUsuario){
 
@@ -65,7 +75,11 @@ public class CadastroRespostaBC implements CadastroResposta {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Metodo utilizado para deletar uma resposta
+	 * @param id - Id da resposta a ser deletada
+	 */
 	@Override
 	public void deletarResposta(int id) {
 		try {
@@ -79,21 +93,30 @@ public class CadastroRespostaBC implements CadastroResposta {
 		}
 	}
 
+	/**
+	 * Metodo responsavel por consultar resposta por id
+	 * @param id - Id da resposta
+	 * @return Resposta encontrada
+	 */
 	@Override
-	public Resposta consultarRespostaPorIdResposta(int id)  {
+	public Resposta consultarRespostaPorId(int id)  {
 		Resposta resposta = new Resposta();
 		try {
 			if (id == 0) {
 
 			} else {
-				resposta = cadastro.consultarRespostaPorIdResposta(id);
+				resposta = cadastro.consultarRespostaPorId(id);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return resposta;
 	}
-
+	
+	/**
+	 * Metodo responsavel por consultar respostas atraves de um id de usuario
+	 * @return Lista de respostas encontradas
+	 */
 	@Override
 	public ArrayList<Resposta> consultarRespostaPorIdUsuario(int id)
 			throws SQLException {
@@ -109,7 +132,11 @@ public class CadastroRespostaBC implements CadastroResposta {
 		}
 		return lstResposta;
 	}
-
+	
+	/**
+	 * Metodo responsavel por consultar todas as respostas
+	 * @return Lista com todas as respostas encontradas
+	 */
 	@Override
 	public ArrayList<Resposta> consultarTodasRespostas() throws SQLException {
 		lstResposta = new ArrayList<Resposta>();
@@ -120,7 +147,12 @@ public class CadastroRespostaBC implements CadastroResposta {
 		}
 		return lstResposta;
 	}
-
+	
+	/**
+	 * Metodo responsavel por consultar respostas atraves do id de uma pergunta
+	 * @param id- IdPergunta
+	 * @return Lista de respostas encontradas
+	 */
 	@Override
 	public ArrayList<Resposta> consultarRespostaPorPergunta(int id) {
 		lstResposta = new ArrayList<Resposta>();
@@ -135,7 +167,11 @@ public class CadastroRespostaBC implements CadastroResposta {
 		}
 		return lstResposta;
 	}
-
+	
+	/**
+	 * Metodo responsavel por adicionar um voto em uma resposta
+	 * @param id - Id da resposta
+	 */
 	public void adicionarVotoResposta(int id){
 		try {
 			cadastro.adcionarVotoResposta(id);
@@ -144,6 +180,10 @@ public class CadastroRespostaBC implements CadastroResposta {
 		}
 	}
 	
+	/**
+	 * Metodo responsavel por remover um voto de uma resposta
+	 * @param id - Id da resposta
+	 */
 	public void removerVotoResposta(int id){
 		try {
 			cadastro.removerVotoResposta(id);
@@ -152,6 +192,10 @@ public class CadastroRespostaBC implements CadastroResposta {
 		}
 	}
 
+	/**
+	 * Metodo responsavel por alterar uma resposta
+	 * @param resposta - Resposta a ser alterada
+	 */
 	@Override
 	public String alterarResposta(Resposta resposta){
 		String msg = "";
@@ -168,6 +212,12 @@ public class CadastroRespostaBC implements CadastroResposta {
 		return msg;
 	}
 	
+	/**
+	 * Metodo responsavel por validar os dados de uma resposta
+	 * @param resposta -  Resposta a ser validada
+	 * @return status da validacao - Se retornar ""(vazio) não houve erro.
+	 * 							   - Se houver erro uma msg erro sera retornada. 
+	 */
 	private String verificaCampos(Resposta resposta){
 		String retorno = "";
 		if (resposta.getData() == null) {

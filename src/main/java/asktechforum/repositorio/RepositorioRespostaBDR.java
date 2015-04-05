@@ -9,17 +9,29 @@ import java.util.ArrayList;
 import asktechforum.dominio.Pergunta;
 import asktechforum.dominio.Resposta;
 import asktechforum.dominio.Usuario;
-import asktechforum.interfaces.CadastroResposta;
+import asktechforum.interfaces.RepositorioResposta;
 import asktechforum.util.ConnectionUtil;
 
-public class CadastroRespostaDAO implements CadastroResposta {
+/**
+ * Repositorio de dados para o objeto Resposta
+ */
+public class RepositorioRespostaBDR implements RepositorioResposta {
 
 	private Connection con = null;
 
-	public CadastroRespostaDAO() {
+	/**
+	 * Construtor vazio
+	 */
+	public RepositorioRespostaBDR() {
 	}
-
-	public String adicionarResposta(Resposta resposta) throws SQLException {
+	
+	/**
+	 * Metodo responsavel por inserir uma resposta
+	 * @param Resposta a ser inserida
+	 * @return String com status da acao
+	 * @throws SQLException - Excecao caso ocorra na insercao
+	 */
+	public String inserirResposta(Resposta resposta) throws SQLException {
 		String retorno = "cadastroSucesso";
 		String sql = "insert into RESPOSTA(descricao, idUsuario, idPergunta, data, hora)values(?,?,?,?,?)";
 		PreparedStatement stmt = null;
@@ -44,7 +56,12 @@ public class CadastroRespostaDAO implements CadastroResposta {
 		}
 		return retorno;
 	}
-
+	
+	/**
+	 * Metodo utilizado para deletar uma resposta
+	 * @param id - Id da resposta a ser deletada
+	 * @throws SQLException - Excecao caso ocorra na delecao
+	 */
 	public void deletarResposta(int id) throws SQLException {
 		String sql = "delete from RESPOSTA where idResposta = " + id;
 		PreparedStatement stmt = null;
@@ -61,7 +78,13 @@ public class CadastroRespostaDAO implements CadastroResposta {
 		}
 	}
 
-	public Resposta consultarRespostaPorIdResposta(int id) throws SQLException {
+	/**
+	 * Metodo responsavel por consultar resposta por id
+	 * @param id - Id da resposta
+	 * @return Resposta encontrada
+	 * @throws SQLException - Excecao caso ocorra na consulta
+	 */
+	public Resposta consultarRespostaPorId(int id) throws SQLException {
 		Resposta resposta = new Resposta();
 
 		String sql = "select * from RESPOSTA where idResposta = " + id;
@@ -92,6 +115,11 @@ public class CadastroRespostaDAO implements CadastroResposta {
 		return resposta;
 	}
 
+	/**
+	 * Metodo responsavel por consultar respostas atraves de um id de usuario
+	 * @return Lista de respostas encontradas
+	 * @throws SQLException - Excecao caso ocorra na consulta
+	 */
 	public ArrayList<Resposta> consultarRespostaPorIdUsuario(int id)
 			throws SQLException {
 
@@ -129,7 +157,12 @@ public class CadastroRespostaDAO implements CadastroResposta {
 
 		return resposta;
 	}
-
+	
+	/**
+	 * Metodo responsavel por consultar todas as respostas
+	 * @return Lista com todas as respostas encontradas
+	 * @throws SQLException - Excecao caso ocorra na consulta
+	 */
 	public ArrayList<Resposta> consultarTodasRespostas() throws SQLException {
 		ArrayList<Resposta> resposta = new ArrayList<Resposta>();
 
@@ -164,7 +197,13 @@ public class CadastroRespostaDAO implements CadastroResposta {
 
 		return resposta;
 	}
-
+	
+	/**
+	 * Metodo responsavel por consultar respostas atraves do id de uma pergunta
+	 * @param id- IdPergunta
+	 * @return Lista de respostas encontradas
+	 * @throws SQLException - Excecao caso ocorra na consulta
+	 */
 	public ArrayList<Resposta> consultarRespostaPorPergunta(int id)
 			throws SQLException {
 		ArrayList<Resposta> resposta = new ArrayList<Resposta>();		
@@ -205,6 +244,11 @@ public class CadastroRespostaDAO implements CadastroResposta {
 		return resposta;
 	}
 	
+	/**
+	 * Metodo responsavel por adicionar um voto em uma resposta
+	 * @param id - Id da resposta
+	 * @throws SQLException - Excecao caso ocorra na adicao do voto
+	 */
 	public void adcionarVotoResposta(int id) throws SQLException{
 		String sql = "update resposta set votos = votos + 1 where idResposta = ?";
 		PreparedStatement stmt = null;
@@ -226,6 +270,11 @@ public class CadastroRespostaDAO implements CadastroResposta {
 		}
 	}
 	
+	/**
+	 * Metodo responsavel por remover um voto de uma resposta
+	 * @param id - Id da resposta
+	 * @throws SQLException - Excecao caso ocorra na remocao
+	 */
 	public void removerVotoResposta(int id) throws SQLException{
 		String sql = "update resposta set votos = votos - 1 where idResposta = ?";
 		PreparedStatement stmt = null;
@@ -248,10 +297,10 @@ public class CadastroRespostaDAO implements CadastroResposta {
 	}
 
 	/**
-	 * Método para consultar todos os usuários que contribuíram com alguma resposta 
+	 * Metodo responsavel por consultar todos os usuarios que responderam um determinada pergunta 
 	 * @param id da pergunta
-	 * @return
-	 * @throws SQLException
+	 * @return Lista de usuarios que responderam a pergunta
+	 * @throws SQLException - Excecao caso ocorra na consulta
 	 */
 	public ArrayList<Usuario> consultarContribuintesPergunta(int id)
 			throws SQLException {
@@ -294,10 +343,10 @@ public class CadastroRespostaDAO implements CadastroResposta {
 	}
 
 	/**
-	 * Método para consultar todos os usuários que contribuíram com alguma resposta 
+	 * Metodo responsavel por consultar uma usuario autor de uma pergunta 
 	 * @param id da pergunta
-	 * @return
-	 * @throws SQLException
+	 * @return Usuario - autor da pergunta
+	 * @throws SQLException - Excecao caso ocorra na consulta
 	 */
 	public Usuario consultarAutorPergunta(int id)
 	 			throws SQLException {
@@ -337,7 +386,11 @@ public class CadastroRespostaDAO implements CadastroResposta {
 	 
 		return usuario;
 }
-
+	/**
+	 * Metodo responsavel por alterar uma resposta
+	 * @param resposta - Resposta a ser alterada
+	 * @throws SQLException - Excecao caso ocorra na alteracao da resposta
+	 */
 	@Override
 	public String alterarResposta(Resposta resposta) throws SQLException {
 		String retorno = "alteracaoSucesso";

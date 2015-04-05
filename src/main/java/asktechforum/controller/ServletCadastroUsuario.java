@@ -59,7 +59,7 @@ public class ServletCadastroUsuario extends HttpServlet {
 				usuario.setAdmin(false);
 			}
 			
-			flag = this.usuarioBC.adicionarUsuario(usuario);
+			flag = this.usuarioBC.inserirUsuario(usuario);
 			
 			if(flag) {
 				RequestDispatcher view = request.getRequestDispatcher(SUCESSOCADASTRO);

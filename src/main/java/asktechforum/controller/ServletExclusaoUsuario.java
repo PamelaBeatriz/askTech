@@ -55,7 +55,7 @@ public class ServletExclusaoUsuario extends HttpServlet {
 		
 		if(pesquisaUsuarioEmail != null) {
 			if(quantAdmin > 1) {
-				this.usuarioBC.deletarUsuario(pesquisaUsuarioEmail);
+				this.usuarioBC.deletarUsuarioPorEmail(pesquisaUsuarioEmail);
 				
 				if(usuarioExcluido != null && usuarioLogado != null) {
 					if(usuarioExcluido.getIdUsuario() == usuarioLogado.getIdUsuario()) {

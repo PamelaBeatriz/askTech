@@ -1,5 +1,8 @@
 package asktechforum.dominio;
 
+/**
+ * Classe que representa um Voto
+ */
 public class Voto {
 	private int idVoto;
 	private int idUsuario;

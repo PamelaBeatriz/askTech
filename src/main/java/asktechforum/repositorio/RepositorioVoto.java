@@ -7,13 +7,25 @@ import java.sql.SQLException;
 
 import asktechforum.util.ConnectionUtil;
 
-public class VotoDAO {
+/**
+ * Repositorio de dados para o objeto Voto
+ */
+public class RepositorioVoto {
 	private Connection connection = null;
-
-	public VotoDAO() {
+	
+	/**
+	 * Construtor vazio
+	 */
+	public RepositorioVoto() {
 	}
 	
-	public void adicionarVotoUsuario(int idUsuario, int idResposta) throws SQLException {
+	/**
+	 * Metodo responsavel por inserir um voto
+	 * @param idUsuario- Id do usuario autor do voto
+	 * @param idResposta- Id da resposta que recebera o voto
+	 * @throws SQLException - Excecao caso ocorra na insercao
+	 */
+	public void inserirVoto(int idUsuario, int idResposta) throws SQLException {
 		String sql = "insert into voto(idUsuario, idResposta)values( ?, ? )";
 		PreparedStatement preparedStatement = null;
 		
@@ -33,7 +45,13 @@ public class VotoDAO {
 		}
 	}
 	
-	public void deletarUsuarioVoto(int idUsuario, int idResposta) throws SQLException {
+	/**
+	 * Metodo responsavel por deletar um voto
+	 * @param idUsuario- Id do usuario autor do voto
+	 * @param idResposta- Id da resposta que recebeu o voto
+	 * @throws SQLException - Excecao caso ocorra na delecao
+	 */
+	public void deletarVoto(int idUsuario, int idResposta) throws SQLException {
 		PreparedStatement preparedStatement = null;
         try {
     		this.connection = ConnectionUtil.getConnection();
@@ -52,7 +70,13 @@ public class VotoDAO {
         }
 	}
 	
-	public Boolean consultarUsuarioVoto(int idUsuario, int idResposta) throws SQLException {
+	/**
+	 * Metodo responsavel por consultar voto
+	 * @param idUsuario- Id do usuario autor do voto
+	 * @param idResposta- Id da resposta que recebeu o voto
+	 * @throws SQLException - Excecao caso ocorra na consulta
+	 */
+	public Boolean consultarVoto(int idUsuario, int idResposta) throws SQLException {
 		PreparedStatement preparedStatement = null;
 		ResultSet rs = null;
 		Boolean flag = true;

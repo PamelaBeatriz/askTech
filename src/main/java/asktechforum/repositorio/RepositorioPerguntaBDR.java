@@ -9,17 +9,29 @@ import java.util.ArrayList;
 
 import asktechforum.dominio.Pergunta;
 import asktechforum.dominio.ResultConsultarPergunta;
-import asktechforum.interfaces.CadastroPergunta;
+import asktechforum.interfaces.RepositorioPergunta;
 import asktechforum.util.ConnectionUtil;
 
-public class CadastroPerguntasDAO implements CadastroPergunta {
+/**
+ * Repositorio de dados para o objeto Pergunta
+ */
+public class RepositorioPerguntaBDR implements RepositorioPergunta {
 
 	private Connection con = null;
-
-	public CadastroPerguntasDAO() {
+	
+	/**
+	 * Construtor vazio
+	 */
+	public RepositorioPerguntaBDR() {
 	}
 	
-	public String adcionarPergunta(Pergunta pergunta) throws SQLException {
+	/**
+	 * Metodo responsavel por inserir uma Pergunta no banco de dados
+	 * @param pergunta- Pergunta a ser inserida
+	 * @return status da acao
+	 * @throws SQLException - Excecao caso ocorra na insercao
+	 */
+	public String inserirPergunta(Pergunta pergunta) throws SQLException {
 		String retorno = "cadastroSucesso";
 
 		String sql = "insert into PERGUNTA(titulo, data, hora, descricao, idUsuario, tag)values(?,?,?,?,?,?)";
@@ -45,7 +57,12 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 		}
 		return retorno;
 	}
-
+	
+	/**
+	 * Metodo responsavel por detetar uma Pergunta
+	 * @param id - Id da pergunta
+	 * @throws SQLException - Excecao caso ocorra erro na delecao
+	 */
 	public void deletarPergunta(int id) throws SQLException {
 
 		String sql = "delete from PERGUNTA where idPergunta = " + id;
@@ -62,8 +79,14 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 		}
 
 	}
-
-	public Pergunta consultarPerguntaPorIdPergunta(int id) throws SQLException {
+	
+	/**
+	 * Metodo responsavel por consultar Pergunta fazendo uso de um ID
+	 * @param Id - Id da pergunta
+	 * @return Pergunta encontrada
+	 * @throws SQLException - Excecao caso ocorra erro na consulta
+	 */
+	public Pergunta consultarPerguntaPorId(int id) throws SQLException {
 
 		Pergunta pergunta = new Pergunta();
 
@@ -96,6 +119,12 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 		return pergunta;
 	}
 
+	/**
+	 * Metodo responsavel por consultar pergunta atraves do Id de um usuario
+	 * @param id- Id do usuario
+	 * @return Lista de perguntas encontradas	 
+	 * @throws SQLException - Excecao caso ocorra erro na consulta
+	 */
 	public ArrayList<Pergunta> consultarPerguntaIdUsuario(int id)
 			throws SQLException {
 		ArrayList<Pergunta> pergunta = new ArrayList<Pergunta>();
@@ -110,7 +139,7 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 
 			rs = stmt.executeQuery();
 
-			pergunta = montarLista(rs);
+			pergunta = carregarListaPerguntas(rs);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -123,6 +152,11 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 		return pergunta;
 	}
 
+	/**
+	 * Metodo responsavel por consultar todas as perguntas
+	 * @return Lista de perguntas encontradas
+	 * @throws SQLException - Excecao caso ocorra erro na consulta
+	 */
 	public ArrayList<Pergunta> consultarTodasPerguntas() throws SQLException {
 		ArrayList<Pergunta> pergunta = new ArrayList<Pergunta>();
 
@@ -136,7 +170,7 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 
 			rs = stmt.executeQuery();
 
-			pergunta = montarLista(rs);
+			pergunta = carregarListaPerguntas(rs);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -149,7 +183,11 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 		return pergunta;
 	}
 	
-	
+	/**
+	 * Metodo responsavel por consultar todas as Tags de perguntas
+	 * @return Lista com todas as tags encontradas
+	 * @throws SQLException - Excecao caso ocorra erro na consulta
+	 */
 	public ArrayList<String> consultaTodasAsTags() throws SQLException {
 		ArrayList<String> tags = new ArrayList<String>();
 		
@@ -176,7 +214,12 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 		
 	}
 	
-	public ArrayList<String> separaTags(ResultSet rs){
+	/**
+	 * Metodo responsavel por fazer tratamento de espaco entre as Tags
+	 * @param rs - Retorno da consulta contedo as tags que serao tratadas
+	 * @return Lista de Tags tratadas
+	 */
+	private ArrayList<String> separaTags(ResultSet rs){
 		ArrayList<String> listTags = new ArrayList<String>();
 		String [] resultTag ;
 		
@@ -196,6 +239,12 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 		return listTags;
 	}
 	
+	/**
+	 * Metodo responsavel por consultar pergunta atraves de uma data
+	 * @param data- Data da pergunta
+	 * @return Lista de perguntas encontradas	 
+	 * @throws SQLException - Excecao caso ocorra erro na consulta
+	 */
 	public ArrayList<Pergunta> consultarPerguntaPorData(Date data)
 			throws SQLException {
 		ArrayList<Pergunta> pergunta = new ArrayList<Pergunta>();
@@ -210,8 +259,6 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 			stmt = this.con.prepareStatement(sql);
 
 			rs = stmt.executeQuery();
-
-			
 			
 			while (rs.next()) {
 				Pergunta p = new Pergunta();
@@ -235,7 +282,12 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 
 		return pergunta;
 	}
-
+	/**
+	 * Metodo responsavel por consultar pergunta atraves de uma Tag
+	 * @param tag -  Tag da pergunta
+	 * @return Lista de perguntas encontradas	 
+	 * @throws SQLException - Excecao caso ocorra erro na consulta
+	 */
 	@Override
 	public ArrayList<ResultConsultarPergunta> consultarPerguntaPorTag(String tag)
 			throws SQLException {
@@ -281,7 +333,12 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 	}
 
 	
-	
+	/**
+	 * Metodo responsavel por consultar pergunta atraves de todas as Tags existentes
+	 * @param tag -  Tag da pergunta
+	 * @return Lista de perguntas encontradas	 
+	 * @throws SQLException - Excecao caso ocorra erro na consulta
+	 */
 	@Override
 	public ArrayList<ResultConsultarPergunta> consultarPerguntaPorTodasTags()
 			throws SQLException {
@@ -327,7 +384,13 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 
 		return pergunta;
 	}
-	private ArrayList<Pergunta> montarLista(ResultSet rs)
+	/**
+	 * Metodo responsavel por carregar uma lista de perguntas
+	 * @param rs -  Resultado de uma consulta
+	 * @return Lista de perguntas	 
+	 * @throws SQLException - Excecao caso ocorra no carregamento dos dados
+	 */
+	private ArrayList<Pergunta> carregarListaPerguntas(ResultSet rs)
 			throws SQLException {
 		ArrayList<Pergunta> pergunta = new ArrayList<Pergunta>();
 
@@ -353,7 +416,11 @@ public class CadastroPerguntasDAO implements CadastroPergunta {
 
 		return pergunta;
 	}
-
+	/**
+	 * Metodo responsavel por alterar uma pergunta
+	 * @return Status da acao
+	 * @throws SQLException - Excecao caso erro na alteracao da pergunta
+	 */
 	@Override
 	public String alterarPergunta(Pergunta pergunta) throws SQLException {
 		String retorno = "alteracaoSucesso";

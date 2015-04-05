@@ -59,7 +59,7 @@ public class ServletCadastroPergunta extends HttpServlet {
 		String acao = request.getParameter("acao");
 		if (acao.contentEquals("cadastrar")) {
 			String retornoCadastroPergunta = cadastro
-					.adcionarPergunta(pergunta);
+					.inserirPergunta(pergunta);
 
 			if (retornoCadastroPergunta != null
 					&& !retornoCadastroPergunta.equals("cadastroSucesso")) {

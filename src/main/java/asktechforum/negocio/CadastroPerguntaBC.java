@@ -5,26 +5,37 @@ import java.util.ArrayList;
 
 import asktechforum.dominio.Pergunta;
 import asktechforum.dominio.ResultConsultarPergunta;
-import asktechforum.repositorio.CadastroPerguntasDAO;
-import asktechforum.interfaces.CadastroPergunta;
+import asktechforum.repositorio.RepositorioPerguntaBDR;
+import asktechforum.interfaces.RepositorioPergunta;
 
-public class CadastroPerguntaBC implements CadastroPergunta {
+/**
+ * Classe que lida com as regras de negocio para cadastro de Pergunta
+ */
+public class CadastroPerguntaBC implements RepositorioPergunta {
 
-	private CadastroPerguntasDAO cadastro;
+	private RepositorioPerguntaBDR cadastro;
 	private ArrayList<Pergunta> lstPergunta;
 	private ArrayList<ResultConsultarPergunta> lstQtdPergunta;
-
+	
+	/**
+	 * Construtor
+	 */
 	public CadastroPerguntaBC() {
-		cadastro = new CadastroPerguntasDAO();
+		cadastro = new RepositorioPerguntaBDR();
 	}
-
+	
+	/**
+	 * Metodo responsavel por inserir uma Pergunta no banco de dados
+	 * @param pergunta- Pergunta a ser inserida
+	 * @return status da acao
+	 */
 	@Override
-	public String adcionarPergunta(Pergunta pergunta)  {
+	public String inserirPergunta(Pergunta pergunta)  {
 		String msg = "";
 		try {
 			String msgErro = this.verificaCampos(pergunta);
 			if (msgErro.length()==0) {
-				msg= cadastro.adcionarPergunta(pergunta);
+				msg= cadastro.inserirPergunta(pergunta);
 			}else{
 				msg= msgErro;
 			}
@@ -36,7 +47,11 @@ public class CadastroPerguntaBC implements CadastroPergunta {
 		return msg;
 
 	}
-
+	
+	/**
+	 * Metodo responsavel por detetar uma Pergunta
+	 * @param id - Id da pergunta
+	 */
 	@Override
 	public void deletarPergunta(int id) {
 		try {
@@ -52,15 +67,20 @@ public class CadastroPerguntaBC implements CadastroPergunta {
 
 	}
 
+	/**
+	 * Metodo responsavel por consultar Pergunta fazendo uso de um ID
+	 * @param Id - Id da pergunta
+	 * @return Pergunta encontrada
+	 */
 	@Override
-	public Pergunta consultarPerguntaPorIdPergunta(int id) {
+	public Pergunta consultarPerguntaPorId(int id) {
 
 		Pergunta pergunta = new Pergunta();
 		try {
 			if (id == 0) {
 
 			} else {
-				pergunta = cadastro.consultarPerguntaPorIdPergunta(id);
+				pergunta = cadastro.consultarPerguntaPorId(id);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -68,7 +88,12 @@ public class CadastroPerguntaBC implements CadastroPergunta {
 
 		return pergunta;
 	}
-
+	
+	/**
+	 * Metodo responsavel por consultar pergunta atraves do Id de um usuario
+	 * @param id- Id do usuario
+	 * @return Lista de perguntas encontradas	 
+	 */
 	@Override
 	public ArrayList<Pergunta> consultarPerguntaIdUsuario(int id)
 			throws SQLException {
@@ -88,7 +113,10 @@ public class CadastroPerguntaBC implements CadastroPergunta {
 		return lstPergunta;
 	}
 	
-	
+	/**
+	 * Metodo responsavel por consultar todas as Tags de perguntas
+	 * @return Lista com todas as tags encontradas
+	 */
 	public ArrayList<String> consultaTodasAsTags() {
 		ArrayList<String> tags = new ArrayList<String>();
 		ArrayList<String> tagFiltradas = new ArrayList<String>();
@@ -116,6 +144,10 @@ public class CadastroPerguntaBC implements CadastroPergunta {
 		
 	}
 	
+	/**
+	 * Metodo responsavel por consultar todas as perguntas
+	 * @return Lista de perguntas encontradas
+	 */
 	@Override
 	public ArrayList<Pergunta> consultarTodasPerguntas() {
 		lstPergunta = new ArrayList<Pergunta>();
@@ -129,6 +161,11 @@ public class CadastroPerguntaBC implements CadastroPergunta {
 		return lstPergunta;
 	}
 
+	/**
+	 * Metodo responsavel por consultar pergunta atraves de uma Tag
+	 * @param tag -  Tag da pergunta
+	 * @return Lista de perguntas encontradas	 
+	 */
 	@Override
 	public ArrayList<ResultConsultarPergunta> consultarPerguntaPorTag(String tag){
 		lstQtdPergunta = new ArrayList<ResultConsultarPergunta>();
@@ -145,13 +182,22 @@ public class CadastroPerguntaBC implements CadastroPergunta {
 		}
 		return lstQtdPergunta;
 	}
-
+	
+	/**
+	 * Metodo responsavel por consultar pergunta atraves de todas as Tags existentes
+	 * @param tag -  Tag da pergunta
+	 * @return Lista de perguntas encontradas	 
+	 */
 	@Override
 	public ArrayList<ResultConsultarPergunta> consultarPerguntaPorTodasTags()
 			throws SQLException {
 		return null;
 	}
 
+	/**
+	 * Metodo responsavel por alterar uma pergunta
+	 * @return Status da acao
+	 */
 	@Override
 	public String alterarPergunta(Pergunta pergunta)
 			 {
@@ -171,7 +217,12 @@ public class CadastroPerguntaBC implements CadastroPergunta {
 		return msg;
 		
 	}
-	
+	/**
+	 * Metodo responsavel por validar os dados da pergunta
+	 * @param pergunta - Pergunta a ser validada
+	 * @return status da validacao - Se retornar ""(vazio) não houve erro.
+	 * 							   - Se houver erro uma msg erro sera retornada.
+	 */
 	private String verificaCampos(Pergunta pergunta){
 		String retorno = "";
 		if (pergunta.getData() == null) {

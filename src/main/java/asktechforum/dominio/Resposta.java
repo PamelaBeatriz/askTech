@@ -6,6 +6,9 @@ import java.text.ParseException;
 
 import asktechforum.util.Util;
 
+/**
+ * Classe que representa uma Resposta
+ */
 public class Resposta {
 	private int idResposta;
 	private String descricao;
